@@ -1,0 +1,53 @@
+.container{
+  .mask{
+    position: fixed;
+    background: black;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    z-index: 100000;
+    opacity: .4;
+  }
+
+  .form-group.form-inline.input-wrapper{
+    display: flex;
+    flex-direction: row;
+    flex-grow: 1;
+    flex-wrap: nowrap;
+
+    label{
+      margin-right: 0.5rem;
+    }
+
+    input{
+      width: 100%;
+    }
+  }
+
+  .location{
+    font-weight: bolder;
+  }
+
+  .red{
+    color: red;
+  }
+
+  input{
+    &.dirty{
+      background-color: #dc354550 !important;
+    }
+
+    &.clean{
+      background-color: #28a74550 !important;;
+    }
+  }
+
+  .btn-cep-unknown{
+    border: none;
+    background: transparent;
+    color: blue;
+    text-decoration: underline;
+    cursor: pointer;
+  }
+}
