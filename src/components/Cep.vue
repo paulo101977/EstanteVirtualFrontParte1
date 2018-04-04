@@ -4,6 +4,11 @@
   <b-container>
     <b-row>
       <b-form class="form col-md-12">
+        <!-- loading mask -->
+        <div v-if="loading" class="mask">
+          Loading....
+        </div>
+
         <!-- cep -->
         <div class="form-group form-inline input-wrapper">
           <label for="cep">CEP:
@@ -29,11 +34,6 @@
             variant="primary">Submit</b-button>
         </div>
 
-        <!-- loading mask -->
-        <div v-if="loading" class="mask">
-          Loading....
-        </div>
-
         <!-- message -->
         <div class="form-group">
           <div
@@ -53,7 +53,9 @@
             <b-list-group>
               <b-list-group-item
                 v-for="data in currentDataArr">
-                  <a href="#">{{data.cep}}</a>
+                  <a href="#">
+                    {{`${data.logradouro}, ${data.localidade} - ${data.cep}`}}
+                  </a>
               </b-list-group-item>
             </b-list-group>
         </b-card>
