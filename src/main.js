@@ -16,6 +16,7 @@ import router from './router';
 
 Vue.prototype.$http = axios;
 
+
 Vue.use(VueTheMask);
 Vue.use(BootstrapVue);
 
@@ -26,6 +27,8 @@ Vue.config.productionTip = false;
 new Vue({
   el: '#app',
   router,
-  components: { App },
+  components: {
+     App
+   },
   template: '<App/>',
 });
