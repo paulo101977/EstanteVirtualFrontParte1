@@ -53,12 +53,21 @@
             <b-list-group>
               <b-list-group-item
                 v-for="data in currentDataArr">
-                  <a href="#">
+                  <!-- open modal -->
+                  <b-button class="btn-modal" @click="showModal(data.cep)">
                     {{`${data.logradouro}, ${data.localidade} - ${data.cep}`}}
-                  </a>
+
+                    <!-- the weather -->
+                    <weather-loader :location="`${data.localidade}`"/>
+                  </b-button>
               </b-list-group-item>
             </b-list-group>
         </b-card>
+
+        <!-- map modal -->
+        <modal-maps
+          ref="googleMaps"
+          :mapUrl='this.mapUrl'/>
 
       </b-form>
     </b-row>

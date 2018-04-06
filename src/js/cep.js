@@ -1,3 +1,4 @@
+
 let currentDataArr = [], current;
 
 if (localStorage) {
@@ -5,10 +6,19 @@ if (localStorage) {
   currentDataArr = currentDataArr ? JSON.parse(currentDataArr) : []
 }
 
+
 current = currentDataArr[currentDataArr.length - 1]
+
+
+const BASEURL = "https://www.google.com/maps/embed/v1/directions?"
+                      + "key=AIzaSyCSnTtzEDEPMJDUpkHhZspwZ3nRrURPpWE"
+
 
 export default {
   name: 'EstanteVirtualCepVerification',
+  mounted(){
+    this.getCurrentCoord();
+  },
   data() {
     return {
       form: {
@@ -23,11 +33,17 @@ export default {
       isOk: false,
       currentDataArr: currentDataArr,
       current: current,
-      loading: false
+      loading: false,
+      hasCoordinates: false,
+      coordinates: {lat:10, lng:10},
+      mapUrl: ""
     };
   },
   watch:{
-    'form.cep': function(){
+    'mapUrl': function(){
+
+    },
+    'form.cep': function (){
       let cep = this.form.cep.replace('-', '');
       let request = "";
       let that = this, currentData = [];
@@ -51,6 +67,32 @@ export default {
   methods: {
     onChange: function(value){
 
+    },
+    getCurrentCoord : function(){
+      let that = this, mapUrl = "";
+
+      that.hasCoordinates = false;
+
+      if (navigator.geolocation) {
+          navigator.geolocation.getCurrentPosition((position) => {
+            const { coords } = position
+            that.hasCoordinates = true;
+            that.coordinates = {lat:coords.latitude, lng: coords.longitude};
+
+          })
+      } else {
+        that.hasCoordinates = true;
+      }
+    },
+    showModal :function(cep) {
+      let coords = this.coordinates
+
+      let   mapUrl = BASEURL + `&origin=${cep}&destination=`
+          + `${coords.lat},${coords.lng}`
+
+      this.mapUrl = mapUrl
+
+      this.$root.$emit('bv::show::modal','maps')
     },
     makeRequest: function(){
       let that = this, currentData;

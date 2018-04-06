@@ -14,9 +14,12 @@
     "axios": "^0.18.0",
     "bootstrap": "^4.0.0",
     "bootstrap-vue": "^2.0.0-rc.6",
+    "dns": "^0.2.2",
+    "fetch": "^1.1.0",
     "vue": "^2.5.2",
     "vue-loading-spinner": "^1.0.11",
     "vue-router": "^3.0.1",
+    "vue-skycons": "^1.0.5",
     "vue-the-mask": "^0.11.1"
   },
   "devDependencies": {
