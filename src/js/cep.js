@@ -1,4 +1,6 @@
 
+import { MAP_URL } from '../config'
+
 let currentDataArr = [], current;
 
 if (localStorage) {
@@ -8,10 +10,6 @@ if (localStorage) {
 
 
 current = currentDataArr[currentDataArr.length - 1]
-
-
-const BASEURL = "https://www.google.com/maps/embed/v1/directions?"
-                      + "key=AIzaSyCSnTtzEDEPMJDUpkHhZspwZ3nRrURPpWE"
 
 
 export default {
@@ -25,6 +23,7 @@ export default {
         cep: current ? current.cep : "",
       },
       error: false,
+      errorCoord: false,
       cepClass: '',
       response: {
         logradouro: current ? current.logradouro : "",
@@ -40,8 +39,12 @@ export default {
     };
   },
   watch:{
-    'mapUrl': function(){
+    'hasCoordinates': function(){
+        let that = this;
 
+        this.$refs.distance.forEach((comp)=>{
+          comp.hasCoordinates = that.hasCoordinates;
+        })
     },
     'form.cep': function (){
       let cep = this.form.cep.replace('-', '');
@@ -65,33 +68,33 @@ export default {
     }
   },
   methods: {
-    onChange: function(value){
-
-    },
     getCurrentCoord : function(){
       let that = this, mapUrl = "";
 
       that.hasCoordinates = false;
+      that.errorCoord = false;
 
       if (navigator.geolocation) {
           navigator.geolocation.getCurrentPosition((position) => {
             const { coords } = position
             that.hasCoordinates = true;
             that.coordinates = {lat:coords.latitude, lng: coords.longitude};
+          }, (error) => {
+            that.errorCoord = true;
 
-          })
+          }, {timeout:10000})
       } else {
-        that.hasCoordinates = true;
+        that.hasCoordinates = false;
       }
     },
     showModal :function(cep) {
       let coords = this.coordinates
 
-      let   mapUrl = BASEURL + `&origin=${cep}&destination=`
-          + `${coords.lat},${coords.lng}`
+      let mapUrl =`${MAP_URL}&origin=${cep}&destination=${coords.lat},${coords.lng}`
 
       this.mapUrl = mapUrl
 
+      //emit event to open modal
       this.$root.$emit('bv::show::modal','maps')
     },
     makeRequest: function(){
@@ -100,12 +103,11 @@ export default {
 
       that.loading = true
 
-      that
-      .$http
+      this.$http
       .get(request)
       .then(response  =>  {
 
-        console.log('loaded')
+        //console.log('loaded')
         that.loading = false
 
         if(response && response.data.erro){
@@ -116,20 +118,26 @@ export default {
             that.isOk = true;
 
             if(localStorage){
+              //get the current saved data in localStorage
               currentData = localStorage.getItem("currentData")
 
+              //ensure dasta
               currentData = currentData ?  JSON.parse(currentData) : []
 
+              //update view
               that.currentDataArr = currentData;
-
-              console.log(currentData)
-
               currentData.push(that.response)
 
+              //save to localStorage
               localStorage.setItem(
                 "currentData",
                 JSON.stringify(currentData)
               )
+
+              //emit update to view item
+              this.$refs.distance.forEach((comp)=>{
+                comp.hasCoordinates = that.hasCoordinates;
+              })
             }
         }
       })

@@ -19,7 +19,6 @@
           <b-form-input
               id="cep"
               v-mask="'#####-###'"
-              @change="onChange"
               v-model="form.cep"
               type="text"
               class="form-control"
@@ -32,6 +31,10 @@
             v-on:click="makeRequest"
             type="button"
             variant="primary">Submit</b-button>
+        </div>
+
+        <div v-if="errorCoord">
+          <span class="red">Error ao coletar a geolocalização :(</span>
         </div>
 
         <!-- message -->
@@ -55,10 +58,23 @@
                 v-for="data in currentDataArr">
                   <!-- open modal -->
                   <b-button class="btn-modal" @click="showModal(data.cep)">
-                    {{`${data.logradouro}, ${data.localidade} - ${data.cep}`}}
+                    <span class="col-md-6 text-overflow">
+                      {{`${data.logradouro}, ${data.localidade} - ${data.cep}`}}
+                    </span>
+
+                    <!-- the distance component -->
+                    <distance-cep
+                      ref="distance"
+                      :coords="coordinates"
+                      :cep="data.cep"
+                      :hasCoordinates="hasCoordinates"
+                      class="col-md-4" />
 
                     <!-- the weather -->
-                    <weather-loader :location="`${data.localidade}`"/>
+                    <weather-loader
+                      class="col-md-2 right-align"
+                      :location="`${data.localidade}`"/>
+
                   </b-button>
               </b-list-group-item>
             </b-list-group>
@@ -68,6 +84,7 @@
         <modal-maps
           ref="googleMaps"
           :mapUrl='this.mapUrl'/>
+
 
       </b-form>
     </b-row>

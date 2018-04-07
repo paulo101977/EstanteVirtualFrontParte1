@@ -14,12 +14,7 @@
 <script>
   export default{
       'name': 'ModalMaps',
-      props: ['mapUrl'],
-      data(){
-        return {
-
-        }
-      }
+      props: ['mapUrl']
   }
 </script>
 

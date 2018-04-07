@@ -1,4 +1,18 @@
 .container{
+  .right-align{
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+  }
+
+  .text-overflow{
+    overflow: hidden;
+    white-space: nowrap;
+    word-wrap: break-word;
+    text-overflow: ellipsis;
+  }
+
+
   .mask{
     position: fixed;
     background: black;

@@ -1,6 +1,12 @@
 # Teste para Estante Virtual
 
+## Como abrir o chrome sem restrição de CORS (Windows, MAC)
 
+1- no windows:
+"c:\Program Files (x86)\Google\Chrome\Application\chrome.exe" --disable-web-security --user-data-dir="D:\chrome"
+
+2- no Mac:
+open -a Google\ Chrome --args --disable-web-security --user-data-dir=""
 
 > A Vue.js project
 

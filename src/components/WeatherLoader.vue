@@ -1,6 +1,6 @@
 <!-- map modal -->
 <template>
-  <div>
+  <span>
     <!-- <skycon condition="clear-day"  />
     <skycon condition="clear-night" />
     <skycon condition="partly-cloudy-day" />
@@ -12,14 +12,15 @@
     <skycon condition="wind" />
     <skycon condition="fog" /> -->
 
-    <!-- Width and height -->
+    <!-- current weather  icon -->
     <skycon v-if="this.condition" :condition="this.condition" />
-    <div v-if="!this.condition" class="loader" />
-  </div>
+    <span v-if="!this.condition" class="loader" />
+  </span>
 </template>
 <script>
-  const BASE_URL = "http://api.openweathermap.org/data/2.5/weather?"
-  const API_KEY = "appid=d8d409f23f334713a789b30beb5daa84"
+
+  // import the request config
+  import { BASE_URL , API_KEY } from '../config'
 
 
   export default{
@@ -30,7 +31,8 @@
       },
       data(){
         return {
-          condition: ""
+          condition: "",
+          error: false
         }
       },
       methods: {
@@ -44,18 +46,18 @@
             case "wind":
               return "cloudy";
             case "shower rain":
-            case "rain": return "rain";
+            case "light rain":
+            case "rain":
+              return "rain";
             case "thunderstorm":
               return "sleet"
             case "snow":
               return "snow";
             default: return "clear-day"
           }
-          //
         },
         getCurrentWeather: function(){
-            console.log(this.location)
-
+          //if location received require the current weather to this location
           if(this.location){
              this
               .$http
@@ -65,12 +67,20 @@
                   let { data } = response
                   let { main , description} = data.weather[0];
 
+                  console.log(description)
+
+                  //ensure location is defined and lower case
+                  description = description ? description.toLowerCase() : "";
+
                   //main = main.toLowerCase();
-                  this.condition = this.convertWeather(description)
+                  //
+                  // set the location
+                  this.condition = this.convertWeather(description);
+                  thit.error = false;
                 }
               })
               .catch((err)=>{
-                console.log(err)
+                this.error = true;
               })
           }
         }
@@ -87,6 +97,7 @@
     width: 64px;
     height: 64px;
     animation: spin 2s linear infinite;
+    display: block;
   }
 
   /* Safari */

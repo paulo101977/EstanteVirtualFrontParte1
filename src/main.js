@@ -14,17 +14,17 @@ import Vue from 'vue';
 import App from './App';
 import router from './router';
 
-import VueSkycons from 'vue-skycons'
-import ModalMaps from '@/components/ModalMaps'
-import WeatherLoader from '@/components/WeatherLoader'
+import VueSkycons from 'vue-skycons';
 
+//import custom components
+import ModalMaps from '@/components/ModalMaps';
+import WeatherLoader from '@/components/WeatherLoader';
+import DistanceCep from '@/components/DistanceCep';
 
-console.log(Vue.$http)
 
 //attach the axios/fetch to scope of the application
 Vue.prototype.$http = axios;
 
-//axios.headers.common['Access-Control-Allow-Origin'] = '*'
 
 //use external libs
 Vue.use(VueSkycons, { color: 'orangered' })
@@ -36,6 +36,7 @@ Vue.config.productionTip = false;
 /* my custom components */
 Vue.component('modal-maps', ModalMaps)
 Vue.component('weather-loader', WeatherLoader)
+Vue.component('distance-cep', DistanceCep)
 
 /* eslint-disable no-new */
 new Vue({
