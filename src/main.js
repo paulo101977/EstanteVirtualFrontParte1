@@ -5,10 +5,12 @@
 
 import 'bootstrap/dist/css/bootstrap.css';
 import 'bootstrap-vue/dist/bootstrap-vue.css';
+import 'vue-awesome/icons'
 import BootstrapVue from 'bootstrap-vue';
 import VueTheMask from 'vue-the-mask';
-//import fetch from 'fetch'
+import Icon from 'vue-awesome/components/Icon'
 import axios from 'axios'
+import VueCookie from 'vue-cookie';
 
 import Vue from 'vue';
 import App from './App';
@@ -22,14 +24,26 @@ import WeatherLoader from '@/components/WeatherLoader';
 import DistanceCep from '@/components/DistanceCep';
 
 
+
+//import the db
+import db from './db/'
+
+//import the vuex store
+import store from './store/'
+
+
 //attach the axios/fetch to scope of the application
 Vue.prototype.$http = axios;
 
+//the database
+Vue.prototype.$db_obj = db;
 
 //use external libs
 Vue.use(VueSkycons, { color: 'orangered' })
 Vue.use(VueTheMask);
 Vue.use(BootstrapVue);
+Vue.use(VueCookie);
+Vue.component('icon', Icon)
 
 Vue.config.productionTip = false;
 
@@ -41,6 +55,7 @@ Vue.component('distance-cep', DistanceCep)
 /* eslint-disable no-new */
 new Vue({
   el: '#app',
+  store, //append the store to application
   router,
   components: {
      App

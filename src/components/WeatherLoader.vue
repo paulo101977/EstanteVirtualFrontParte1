@@ -14,7 +14,7 @@
 
     <!-- current weather  icon -->
     <skycon v-if="this.condition" :condition="this.condition" />
-    <span v-if="!this.condition" class="loader" />
+    <span  v-if="!this.condition" class="loader" />
   </span>
 </template>
 <script>
@@ -67,8 +67,6 @@
                   let { data } = response
                   let { main , description} = data.weather[0];
 
-                  console.log(description)
-
                   //ensure location is defined and lower case
                   description = description ? description.toLowerCase() : "";
 
@@ -91,12 +89,12 @@
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped lang="scss">
   .loader {
-    border: 10px solid white;
+    border: 10px solid #DDDDDD77;
     border-radius: 50%;
-    border-top: 10px solid grey;
+    border-top: 10px solid orangered;
     width: 64px;
     height: 64px;
-    animation: spin 2s linear infinite;
+    animation: spin 1.5s linear infinite;
     display: block;
   }
 

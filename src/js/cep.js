@@ -1,50 +1,50 @@
 
 import { MAP_URL } from '../config'
 
-let currentDataArr = [], current;
+import Vuex from 'vuex'
 
-if (localStorage) {
-  currentDataArr = localStorage.getItem("currentData")
-  currentDataArr = currentDataArr ? JSON.parse(currentDataArr) : []
-}
-
-
-current = currentDataArr[currentDataArr.length - 1]
 
 
 export default {
   name: 'EstanteVirtualCepVerification',
+  created(){
+    this.$store.dispatch('updateData', this.$db_obj.ref('cep_collect'))
+  },
+  computed: Vuex.mapGetters(['items']),
   mounted(){
     this.getCurrentCoord();
+    this.userId = this.getId();
   },
   data() {
     return {
       form: {
-        cep: current ? current.cep : "",
+        cep: "",
       },
       error: false,
       errorCoord: false,
       cepClass: '',
       response: {
-        logradouro: current ? current.logradouro : "",
-        localidade: current ? current.localidade : ""
+        logradouro: "",
+        localidade: ""
       },
       isOk: false,
-      currentDataArr: currentDataArr,
-      current: current,
       loading: false,
       hasCoordinates: false,
       coordinates: {lat:10, lng:10},
-      mapUrl: ""
+      mapUrl: "",
+      userId: ""
     };
   },
   watch:{
     'hasCoordinates': function(){
         let that = this;
 
-        this.$refs.distance.forEach((comp)=>{
-          comp.hasCoordinates = that.hasCoordinates;
-        })
+        if(this.$refs.distance){
+          this.$refs.distance.forEach((comp)=>{
+            comp.hasCoordinates = that.hasCoordinates;
+          })
+        }
+
     },
     'form.cep': function (){
       let cep = this.form.cep.replace('-', '');
@@ -52,8 +52,6 @@ export default {
       let that = this, currentData = [];
 
       //clean the data
-      that.response.logradouro = "";
-      that.response.localidade = "";
       that.isOk = false;
       that.error = false;
 
@@ -68,6 +66,28 @@ export default {
     }
   },
   methods: {
+    onRemove(index, data) {
+        this.$db_obj.ref('cep_collect').child(data['.key']).remove()
+        this.$refs.popover[index].$emit('close')
+    },
+    onCancel(index){
+        this.$refs.popover[index].$emit('close')
+    },
+    getId(){
+      let hasId = this.$cookie.get('userId') || false
+      let id = hasId ? this.$cookie.get('userId') : ''
+
+
+      id = id ? id : this.$store.getters.generatedId;
+
+      if(!hasId){
+        //save the generatedId
+        this.$cookie.set('userId', id)
+      }
+
+
+      return id;
+    },
     getCurrentCoord : function(){
       let that = this, mapUrl = "";
 
@@ -98,10 +118,11 @@ export default {
       this.$root.$emit('bv::show::modal','maps')
     },
     makeRequest: function(){
-      let that = this, currentData;
-      let request = `http://viacep.com.br/ws/${that.form.cep}/json/`;
+      let that = this, currentData, id = '';
+      let request = `https://viacep.com.br/ws/${that.form.cep}/json/`;
 
       that.loading = true
+
 
       this.$http
       .get(request)
@@ -117,28 +138,12 @@ export default {
             that.response = response.data;
             that.isOk = true;
 
-            if(localStorage){
-              //get the current saved data in localStorage
-              currentData = localStorage.getItem("currentData")
+            id = that.getId();
 
-              //ensure dasta
-              currentData = currentData ?  JSON.parse(currentData) : []
+            that.response.userId = id;
 
-              //update view
-              that.currentDataArr = currentData;
-              currentData.push(that.response)
+            that.$db_obj.ref('cep_collect').push(that.response)
 
-              //save to localStorage
-              localStorage.setItem(
-                "currentData",
-                JSON.stringify(currentData)
-              )
-
-              //emit update to view item
-              this.$refs.distance.forEach((comp)=>{
-                comp.hasCoordinates = that.hasCoordinates;
-              })
-            }
         }
       })
       .catch(() => {

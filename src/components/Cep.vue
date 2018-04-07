@@ -55,10 +55,10 @@
                 header-tag="header">
             <b-list-group>
               <b-list-group-item
-                v-for="data in currentDataArr">
-                  <!-- open modal -->
-                  <b-button class="btn-modal" @click="showModal(data.cep)">
-                    <span class="col-md-6 text-overflow">
+                v-for="(data, index) in items">
+                  <!-- item  -->
+                  <div class="item btn-modal">
+                    <span class="col-md-4 text-overflow">
                       {{`${data.logradouro}, ${data.localidade} - ${data.cep}`}}
                     </span>
 
@@ -68,14 +68,50 @@
                       :coords="coordinates"
                       :cep="data.cep"
                       :hasCoordinates="hasCoordinates"
-                      class="col-md-4" />
+                      class="col-md-3 text-overflow" />
 
                     <!-- the weather -->
                     <weather-loader
                       class="col-md-2 right-align"
                       :location="`${data.localidade}`"/>
 
-                  </b-button>
+                    <b-button
+                      title="mapa"
+                      variant="outline-primary"
+                      @click="showModal(data.cep)">
+                      <icon name="map-marker-alt"/>
+                    </b-button>
+
+                    <b-button
+                      v-bind:id="'remove-btn' + index"
+                      title="remover"
+                      :disabled="userId !== data.userId"
+                      variant="outline-danger">
+                        <icon name="trash-alt"/>
+                    </b-button>
+
+                    <!-- remove popover -->
+                    <b-popover
+                        v-bind:target="'remove-btn' + index"
+                        ref="popover"
+                        title="Remover?"
+                        placement="left"
+                        triggers="click">
+                        <template>
+                          <b-button
+                            variant="outline-primary"
+                            @click="onRemove(index, data)">
+                            <icon name="thumbs-up"/>
+                          </b-button>
+                          <b-button
+                            variant="outline-danger"
+                            @click="onCancel(index)">
+                            <icon name="thumbs-down" />
+                          </b-button>
+                        </template>
+                    </b-popover>
+
+                  </div>
               </b-list-group-item>
             </b-list-group>
         </b-card>
