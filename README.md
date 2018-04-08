@@ -10,6 +10,12 @@ open -a Google\ Chrome --args --disable-web-security --user-data-dir=""
 
 > A Vue.js project
 
+
+## Hospedagem Firebase:
+
+A url para acessar é 
+[Estante teste](https://estanteteste.firebaseapp.com/)
+
 ## Build Setup
 
 ``` bash
