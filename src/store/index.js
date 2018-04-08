@@ -2,6 +2,7 @@ import Vuex from 'vuex'
 import Vue from 'vue'
 import cep from './modules/cep.js'
 import idgen from './modules/idgen'
+import coord from './modules/coord'
 
 import { firebaseMutations } from 'vuexfire'
 
@@ -13,7 +14,8 @@ export default new Vuex.Store({
     },
     modules: {
       mCep: cep,
-      mId: idgen
+      mId: idgen,
+      mCoord: coord,
     }
   })
 

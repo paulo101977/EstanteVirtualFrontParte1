@@ -40,11 +40,13 @@ export default {
     'hasCoordinates': function(){
         let that = this;
 
-        if(this.$refs.distance){
+        this.$store.dispatch('hasCoordinatesChanged', this.hasCoordinates)
+
+        /*if(this.$refs.distance){
           this.$refs.distance.forEach((comp)=>{
             comp.hasCoordinates = that.hasCoordinates;
           })
-        }
+        }*/
 
     },
     'form.cep': function (){

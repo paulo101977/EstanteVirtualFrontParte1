@@ -15,6 +15,14 @@
 
   export default{
       name: 'DistanceCep',
+      computed: {
+        hasCoordinates: {
+          get(){
+              console.log('computed distance', this.$store)
+              return this.$store.getters.hasCoordinates
+          }
+        }
+      },
       mounted(){
         //try load the distance
         this.loadDistanceInfo()
@@ -28,14 +36,14 @@
       data(){
         return{
           distance: '',
-          hasCoordinates: false
+          //hasCoordinates: false
         }
       },
       methods: {
         loadDistanceInfo: function(){
           let { lat , lng } = this.coords;
 
-          console.log('load distance', this.coords)
+          //console.log('load distance', this.coords)
 
           if(this.hasCoordinates){
             this
