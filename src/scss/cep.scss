@@ -1,8 +1,123 @@
+/* custom scroll */
+/* width */
+::-webkit-scrollbar {
+    width: 10px;
+    overflow: hidden;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 6px;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+    background: #007bff;
+    border-radius: 6px;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+    background: #007bff99;
+}
+/* end custom scroll */
+
 .container{
+  & .list-group{
+    max-height: 50vh;
+    overflow: hidden;
+    overflow-y: scroll;
+    transition: max-height 300ms ease-in-out;
+    height: 100%;
+
+    &.opened{
+      max-height: 50vh;
+    }
+
+    &.closed{
+      max-height: 0 !important;
+    }
+
+    .list-group-item{
+        transition: opacity 300ms;
+        opacity: 0.5 !important;
+
+        &:hover{
+          opacity: 1 !important;
+        }
+    }
+  }
+
+  .custom-header{
+    padding: 2.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background:  #007bff;
+
+    .message{
+      font-weight: bolder;
+      color: white;
+    }
+
+    .icon{
+      transition: transform 300ms;
+      transform: rotateZ(45deg);
+      height: auto;
+      width: auto;
+      line-height: 0;
+
+      i{
+        border: solid white;
+        border-width: 0 4px 4px 0;
+        display: inline-block;
+        padding: 3px;
+      }
+
+
+      &.opened{
+        transform: rotateZ(45deg);
+      }
+      &.closed{
+        transform: rotateZ(225deg);
+      }
+    }
+  }
+
+  /* transition to when elements enter and exit the page */
+  .fade-enter-active, .fade-leave-active {
+    transition: opacity .5s;
+  }
+  .fade-enter, .fade-leave-to {
+    opacity: 0;
+  }
+
   .right-align{
     display: flex;
     align-items: center;
     justify-content: flex-end;
+  }
+
+  .card{
+    overflow: hidden;
+    transition: 300ms;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.5);
+    border: none;
+
+    &.card-info-custom{
+      padding: 1rem;
+      transform: scale(1);
+      transition: transform 300ms;
+
+      &:hover{
+        transform: scale(1.1);
+      }
+    }
+
+    &:hover{
+      box-shadow: 0 12px 20px 0 rgba(0,0,0,0.5);
+    }
   }
 
   .card-body{

@@ -35,6 +35,8 @@
         loadDistanceInfo: function(){
           let { lat , lng } = this.coords;
 
+          console.log('load distance', this.coords)
+
           if(this.hasCoordinates){
             this
               .$http

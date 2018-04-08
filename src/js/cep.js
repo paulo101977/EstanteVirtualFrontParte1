@@ -32,7 +32,8 @@ export default {
       hasCoordinates: false,
       coordinates: {lat:10, lng:10},
       mapUrl: "",
-      userId: ""
+      userId: "",
+      open: true,
     };
   },
   watch:{
@@ -66,6 +67,9 @@ export default {
     }
   },
   methods: {
+    openListGroup(){
+      this.open = !this.open;
+    },
     onRemove(index, data) {
         this.$db_obj.ref('cep_collect').child(data['.key']).remove()
         this.$refs.popover[index].$emit('close')

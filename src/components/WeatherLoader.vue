@@ -13,8 +13,19 @@
     <skycon condition="fog" /> -->
 
     <!-- current weather  icon -->
-    <skycon v-if="this.condition" :condition="this.condition" />
-    <span  v-if="!this.condition" class="loader" />
+    <skycon
+      v-bind:title="this.condition"
+      v-if="this.condition"
+      :condition="this.condition" />
+
+    <span
+      title="Carregando" 
+      v-if="!this.condition && !this.notfound"
+      class="loader" />
+
+    <span  title="Não encontrado" v-if="this.notfound">
+      <icon name="exclamation-circle" class="error"/>
+    </span>
   </span>
 </template>
 <script>
@@ -32,7 +43,8 @@
       data(){
         return {
           condition: "",
-          error: false
+          error: false,
+          notfound: false,
         }
       },
       methods: {
@@ -58,10 +70,12 @@
         },
         getCurrentWeather: function(){
           //if location received require the current weather to this location
-          if(this.location){
-             this
+          let that = this;
+
+          if(that.location){
+             that
               .$http
-              .get(`${BASE_URL}${API_KEY}&q=${this.location}`)
+              .get(`${BASE_URL}${API_KEY}&q=${that.location}`)
               .then((response) => {
                 if(response && response.data){
                   let { data } = response
@@ -73,12 +87,14 @@
                   //main = main.toLowerCase();
                   //
                   // set the location
-                  this.condition = this.convertWeather(description);
-                  thit.error = false;
+                  that.condition = that.convertWeather(description);
+                  that.error = false;
+                  that.notfound = false;
                 }
               })
               .catch((err)=>{
-                this.error = true;
+                that.error = true;
+                if(err) that.notfound = true;
               })
           }
         }
@@ -96,6 +112,12 @@
     height: 64px;
     animation: spin 1.5s linear infinite;
     display: block;
+  }
+
+  svg.error{
+    color: red;
+    width: 4rem;
+    height: 4rem;
   }
 
   /* Safari */
